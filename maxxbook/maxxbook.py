@@ -1,12 +1,14 @@
 import os
-import sqlite3
+from datetime import datetime
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 app.config.update(dict(
-	DATABASE=os.path.join(app.root_path, 'maxxbook.db'),
+	# DATABASE=os.path.join(app.root_path, 'maxxbook.db'),
+	SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.root_path, 'maxxbook.db'),
 	DEBUG=True,
 	SECRET_KEY='development key',
 	USERNAME='admin',
@@ -14,48 +16,58 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
-def connect_db():
-	rv = sqlite3.connect(app.config['DATABASE'])
-	rv.row_factory = sqlite3.Row
-	return rv
+db = SQLAlchemy(app)
 
-def init_db():
-	db = get_db()
-	with app.open_resource('schema.sql', mode='r') as f:
-		db.cursor().executescript(f.read())
-	db.commit()
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True)
+    email = db.Column(db.String(120), unique=True)
 
-@app.cli.command('initdb')
-def initdb_command():
-	init_db()
-	print('Initialized the database.')
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
 
-def get_db():
-	if not hasattr(g, 'sqlite_db'):
-		g.sqlite_db = connect_db()
-	return g.sqlite_db
+    def __repr__(self):
+        return '<User %r>' % self.username
 
-@app.teardown_appcontext
-def close_db(error):
-	if hasattr(g, 'sqlite_db'):
-		g.sqlite_db.close()
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80))
+    body = db.Column(db.Text)
+    pub_date = db.Column(db.DateTime)
+
+    # category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    # category = db.relationship('Category',
+    #     backref=db.backref('posts', lazy='dynamic'))
+
+    def __init__(self, title, body, pub_date=None):
+        self.title = title
+        self.body = body
+        if pub_date is None:
+            pub_date = datetime.utcnow()
+        self.pub_date = pub_date
+        # self.category = category
+
+    def __repr__(self):
+        return '<Post %r>' % self.title
 
 @app.route('/')
-def show_entries():
-	db = get_db()
-	cur = db.execute('select title, text from entries order by id desc')
-	entries = cur.fetchall()
-	return render_template('show_entries.html', entries=entries)
+def show_posts():
+	posts = Post.query.all()
+	return render_template('show_posts.html', posts=posts)
 
 @app.route('/add', methods=['POST'])
-def add_entry():
+def add_post():
 	if not session.get('logged_in'):
 		abort(401)
-	db = get_db()
-	db.execute('insert into entries (title, text) values (?, ?)', [request.form['title'], request.form['text']])
-	db.commit()
+
+	new_post = Post(request.form['title'], request.form['body'])
+	db.session.add(new_post)
+	db.session.commit()
+
 	flash('New entry was successfully posted')
-	return redirect(url_for('show_entries'))
+
+	return redirect(url_for('show_posts'))
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
