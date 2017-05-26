@@ -1,0 +1,3 @@
+graft maxxbook/templates
+graft maxxbook/static
+include maxxbook/schema.sql

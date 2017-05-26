@@ -1,0 +1,1 @@
+from .maxxbook import app
