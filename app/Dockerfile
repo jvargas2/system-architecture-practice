@@ -4,7 +4,7 @@ RUN apt-get install -y python3-pip python3-dev build-essential
 COPY . /app
 WORKDIR /app
 RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements.txt
-RUN pip3 install --editable .
-ENTRYPOINT ["flask"]
-CMD ["run", "--host=0.0.0.0"]
+RUN pip install -r requirements.txt
+RUN pip install --editable .
+ENTRYPOINT ["uwsgi"]
+CMD ["--emperor", "/app"]

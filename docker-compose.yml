@@ -1,11 +1,22 @@
-web:
-  build: .
+app:
+  build: ./app
   environment:
    - "FLASK_APP=maxxbook"
    - "FLASK_DEBUG=1"
-   - "LC_ALL=C.UTF-8"
    - "LANG=C.UTF-8"
+  expose:
+   - "3031"
+   - "3032"
   ports:
    - "5000:5000"
   volumes:
-   - .:/app
+   - ./app:/app
+nginx:
+  image: nginx:latest
+  links:
+   - app:uwsgi
+  ports:
+   - "80:80"
+   - "8080:8080"
+  volumes:
+   - ./nginx/nginx.conf:/etc/nginx/nginx.conf
