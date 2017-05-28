@@ -1,0 +1,11 @@
+web:
+  build: .
+  environment:
+   - "FLASK_APP=maxxbook"
+   - "FLASK_DEBUG=1"
+   - "LC_ALL=C.UTF-8"
+   - "LANG=C.UTF-8"
+  ports:
+   - "5000:5000"
+  volumes:
+   - .:/app
