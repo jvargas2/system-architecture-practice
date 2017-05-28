@@ -7,8 +7,6 @@ app:
   expose:
    - "3031"
    - "3032"
-  ports:
-   - "5000:5000"
   volumes:
    - ./app:/app
 nginx:

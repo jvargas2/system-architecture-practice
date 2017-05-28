@@ -8,7 +8,7 @@ app.config.from_object(__name__)
 
 app.config.update(dict(
 	# DATABASE=os.path.join(app.root_path, 'maxxbook.db'),
-	SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.root_path, 'maxxbook.db'),
+	SQLALCHEMY_DATABASE_URI='postgresql://localhost/maxxbook_dev',
 	DEBUG=True,
 	SECRET_KEY='development key',
 	USERNAME='admin',
@@ -80,14 +80,14 @@ def login():
 		else:
 			session['logged_in'] = True
 			flash('You were logged in')
-			return redirect(url_for('show_entries'))
+			return redirect(url_for('show_posts'))
 	return render_template('login.html', error=error)
 
 @app.route('/logout')
 def logout():
 	session.pop('logged_in', None)
 	flash('You were logged out')
-	return redirect(url_for('show_entries'))
+	return redirect(url_for('show_posts'))
 
 if __name__ == "__main__":
 	app.run()
