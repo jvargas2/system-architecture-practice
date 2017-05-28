@@ -7,6 +7,8 @@ app:
   expose:
    - "3031"
    - "3032"
+  links:
+   - postgres:postgres
   volumes:
    - ./app:/app
 nginx:
@@ -18,3 +20,7 @@ nginx:
    - "8080:8080"
   volumes:
    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+postgres:
+  image: postgres:latest
+  ports:
+   - "5432:5432"

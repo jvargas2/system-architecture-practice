@@ -1,55 +1,20 @@
 import os
-from datetime import datetime
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
-from flask_sqlalchemy import SQLAlchemy
+from maxxbook.database import db_session
+from maxxbook.models import User
+from maxxbook.models import Post
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 app.config.update(dict(
-	# DATABASE=os.path.join(app.root_path, 'maxxbook.db'),
-	SQLALCHEMY_DATABASE_URI='postgresql://localhost/maxxbook_dev',
+	SQLALCHEMY_DATABASE_URI='postgresql://postgres@localhost/maxxbook_dev',
 	DEBUG=True,
 	SECRET_KEY='development key',
 	USERNAME='admin',
 	PASSWORD='default'
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
-
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), unique=True)
-
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
-
-    def __repr__(self):
-        return '<User %r>' % self.username
-
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
-    body = db.Column(db.Text)
-    pub_date = db.Column(db.DateTime)
-
-    # category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    # category = db.relationship('Category',
-    #     backref=db.backref('posts', lazy='dynamic'))
-
-    def __init__(self, title, body, pub_date=None):
-        self.title = title
-        self.body = body
-        if pub_date is None:
-            pub_date = datetime.utcnow()
-        self.pub_date = pub_date
-        # self.category = category
-
-    def __repr__(self):
-        return '<Post %r>' % self.title
 
 @app.route('/')
 def show_posts():
@@ -62,8 +27,8 @@ def add_post():
 		abort(401)
 
 	new_post = Post(request.form['title'], request.form['body'])
-	db.session.add(new_post)
-	db.session.commit()
+	db_session.add(new_post)
+	db_session.commit()
 
 	flash('New entry was successfully posted')
 
