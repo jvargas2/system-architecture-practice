@@ -55,6 +55,22 @@ def login():
 			return redirect(url_for('show_posts'))
 	return render_template('login.html', error=error)
 
+@app.route('/register', methods = ['GET', 'POST'])
+def register():
+	error = None
+	if request.method == 'POST':
+		email = request.form['email']
+		first_name = request.form['first_name']
+		last_name = request.form['last_name']
+		password = request.form['password']
+		new_user = User(email, first_name, last_name, password)
+		db.session.add(new_user)
+		db.session.commit()
+		session['user'] = new_user.email
+		flash('New user was successfully created')
+		return redirect(url_for('show_posts'))
+	return render_template('register.html', error=error)
+
 @app.route('/logout')
 def logout():
 	session.pop('user', None)

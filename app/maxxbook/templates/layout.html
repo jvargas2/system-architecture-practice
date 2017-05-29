@@ -6,7 +6,7 @@
     <h1>Maxxbook</h1>
     <div class=metanav>
     {% if not session.user %}
-      <a href="{{ url_for('login') }}">Log in</a>
+      <a href="{{ url_for('login') }}">Log in</a> <a href="{{ url_for('register') }}">Register</a>
     {% else %}
       <a href="{{ url_for('logout') }}">Log out {{ user.first_name }}</a>
     {% endif %}
