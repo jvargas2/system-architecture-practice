@@ -9,11 +9,15 @@
       </dl>
     </form>
   {% endif %}
-  <ul class=entries>
+  </div>
   {% for post in posts %}
-    <li>{{ post.body|safe }}
-  {% else %}
-    <li><em>Unbelievable. No posts here so far.</em>
+  <div class=card>
+    <div class=card-title>
+      {{ user.first_name + " " + user.last_name + " says..."}}
+    </div>
+    <div class=card-body>
+      <h2>{{ post.body|safe }}</h2>
+    </div>
+  </div>
   {% endfor %}
-  </ul>
 {% endblock %}

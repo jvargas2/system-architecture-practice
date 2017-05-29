@@ -12,7 +12,7 @@ def current_user():
 
 @app.route('/')
 def show_posts():
-	posts = Post.query.all()
+	posts = Post.query.order_by(Post.pub_date.desc())
 	if session.get('user'):
 		user = current_user()
 		return render_template('show_posts.html', user=user, posts=posts)
