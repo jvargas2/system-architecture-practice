@@ -18,16 +18,11 @@ def show_posts():
 	post_titles = {}
 	for user in users:
 		users_by_id[user.id] = user
-	for post in posts:
-		first_name = users_by_id[post.user_id].first_name
-		last_name = users_by_id[post.user_id].last_name
-		title = first_name + ' ' + last_name + ' says...'
-		post_titles[post.id] = title
 	if session.get('user'):
 		user = current_user()
-		return render_template('show_posts.html', user=user, posts=posts, post_titles=post_titles)
+		return render_template('show_posts.html', user=user, posts=posts, users_by_id=users_by_id)
 	else:
-		return render_template('show_posts.html', user=None, posts=posts, post_titles=post_titles)
+		return render_template('show_posts.html', user=None, posts=posts, users_by_id=users_by_id)
 
 @app.route('/add', methods=['POST'])
 def add_post():
