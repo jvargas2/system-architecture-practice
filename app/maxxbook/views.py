@@ -13,11 +13,21 @@ def current_user():
 @app.route('/')
 def show_posts():
 	posts = Post.query.order_by(Post.pub_date.desc())
+	users = User.query.all()
+	users_by_id = {}
+	post_titles = {}
+	for user in users:
+		users_by_id[user.id] = user
+	for post in posts:
+		first_name = users_by_id[post.user_id].first_name
+		last_name = users_by_id[post.user_id].last_name
+		title = first_name + ' ' + last_name + ' says...'
+		post_titles[post.id] = title
 	if session.get('user'):
 		user = current_user()
-		return render_template('show_posts.html', user=user, posts=posts)
+		return render_template('show_posts.html', user=user, posts=posts, post_titles=post_titles)
 	else:
-		return render_template('show_posts.html', user=None, posts=posts)
+		return render_template('show_posts.html', user=None, posts=posts, post_titles=post_titles)
 
 @app.route('/add', methods=['POST'])
 def add_post():
@@ -50,6 +60,12 @@ def login():
 			return redirect(url_for('show_posts'))
 	return render_template('login.html', error=error)
 
+@app.route('/logout')
+def logout():
+	session.pop('user', None)
+	flash('You were logged out')
+	return redirect(url_for('show_posts'))
+
 @app.route('/user/<int:user_id>')
 def show_user_profile(user_id):
 	user = User.query.filter_by(id=user_id).first()
@@ -60,9 +76,3 @@ def show_user_profile(user_id):
 def show_post(post_id):
 	post = Post.query.filter_by(id=post_id).first()
 	return 'Post %s' % post.body
-
-@app.route('/logout')
-def logout():
-	session.pop('user', None)
-	flash('You were logged out')
-	return redirect(url_for('show_posts'))

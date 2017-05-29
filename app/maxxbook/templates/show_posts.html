@@ -13,7 +13,7 @@
   {% for post in posts %}
   <div class=card>
     <div class=card-title>
-      {{ user.first_name + " " + user.last_name + " says..."}}
+      {{ post_titles[post.id] }}
     </div>
     <div class=card-body>
       <h2>{{ post.body|safe }}</h2>
