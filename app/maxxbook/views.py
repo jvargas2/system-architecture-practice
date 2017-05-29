@@ -50,6 +50,17 @@ def login():
 			return redirect(url_for('show_posts'))
 	return render_template('login.html', error=error)
 
+@app.route('/user/<int:user_id>')
+def show_user_profile(user_id):
+	user = User.query.filter_by(id=user_id).first()
+	name = user.first_name + ' ' + user.last_name
+	return 'User %s' % name
+
+@app.route('/post/<int:post_id>')
+def show_post(post_id):
+	post = Post.query.filter_by(id=post_id).first()
+	return 'Post %s' % post.body
+
 @app.route('/logout')
 def logout():
 	session.pop('user', None)
