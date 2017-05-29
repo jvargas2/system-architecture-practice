@@ -1,8 +1,8 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, DateTime
-from maxxbook.database import Base
+from maxxbook.index import db
 
-class User(Base):
+class User(db.Model):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     username = Column(String(80), unique=True)
@@ -15,7 +15,7 @@ class User(Base):
     def __repr__(self):
         return '<User %r>' % self.username
 
-class Post(Base):
+class Post(db.Model):
     __tablename__ = 'posts'
     id = Column(Integer, primary_key=True)
     title = Column(String(80))

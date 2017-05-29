@@ -1,26 +1,30 @@
-app:
-  build: ./app
-  environment:
-   - "FLASK_APP=maxxbook"
-   - "FLASK_DEBUG=1"
-   - "LANG=C.UTF-8"
-  expose:
-   - "3031"
-   - "3032"
-  links:
-   - postgres:postgres
-  volumes:
-   - ./app:/app
-nginx:
-  image: nginx:latest
-  links:
-   - app:uwsgi
-  ports:
-   - "80:80"
-   - "8080:8080"
-  volumes:
-   - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-postgres:
-  image: postgres:latest
-  ports:
-   - "5432:5432"
+version: '2'
+services:
+  app:
+    build: ./app
+    depends_on:
+     - postgres
+    environment:
+     - "FLASK_APP=maxxbook"
+     - "FLASK_DEBUG=1"
+     - "LANG=C.UTF-8"
+    expose:
+     - "3031"
+     - "3032"
+    links:
+     - postgres:postgres
+    volumes:
+     - ./app:/app
+  nginx:
+    image: nginx:latest
+    links:
+     - app:uwsgi
+    ports:
+     - "80:80"
+     - "8080:8080"
+    volumes:
+     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  postgres:
+    image: postgres:latest
+    ports:
+     - "5432:5432"

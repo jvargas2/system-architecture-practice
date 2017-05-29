@@ -1,19 +1,8 @@
-import os
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
-from maxxbook.database import db_session
+from flask import request, session, g, redirect, url_for, abort, render_template, flash
+from maxxbook.index import app, db
 from maxxbook.models import User
 from maxxbook.models import Post
 
-app = Flask(__name__)
-app.config.from_object(__name__)
-
-app.config.update(dict(
-	SQLALCHEMY_DATABASE_URI='postgresql://postgres@localhost/maxxbook_dev',
-	DEBUG=True,
-	SECRET_KEY='development key',
-	USERNAME='admin',
-	PASSWORD='default'
-))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 @app.route('/')
@@ -27,8 +16,8 @@ def add_post():
 		abort(401)
 
 	new_post = Post(request.form['title'], request.form['body'])
-	db_session.add(new_post)
-	db_session.commit()
+	db.session.add(new_post)
+	db.session.commit()
 
 	flash('New entry was successfully posted')
 
