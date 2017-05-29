@@ -8,6 +8,7 @@ services:
      - "FLASK_APP=maxxbook"
      - "FLASK_DEBUG=True"
      - "LANG=C.UTF-8"
+     - "FLASK_DATABASE_URI=postgres://postgres@postgres:5432/maxxbook_dev"
     expose:
      - "3031"
      - "3032"

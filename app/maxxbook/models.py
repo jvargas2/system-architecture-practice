@@ -2,6 +2,7 @@ from datetime import datetime
 from maxxbook import db
 
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
     first_name = db.Column(db.String(80), unique=False)
@@ -21,8 +22,9 @@ class User(db.Model):
         return '<User %r %r>' % (self.first_name, self.last_name)
 
 class Post(db.Model):
+    __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     body = db.Column(db.Text)
     pub_date = db.Column(db.DateTime)
 
