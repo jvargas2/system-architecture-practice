@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, DateTime
-from maxxbook.index import db
+from maxxbook import db
 
 class User(db.Model):
     __tablename__ = 'users'

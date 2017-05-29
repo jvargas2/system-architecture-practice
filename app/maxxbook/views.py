@@ -1,9 +1,7 @@
-from flask import request, session, g, redirect, url_for, abort, render_template, flash
-from maxxbook.index import app, db
-from maxxbook.models import User
+from flask import request, session, redirect, url_for, abort, render_template, flash
+from maxxbook import app
 from maxxbook.models import Post
-
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+from maxxbook.models import User
 
 @app.route('/')
 def show_posts():
@@ -42,6 +40,3 @@ def logout():
 	session.pop('logged_in', None)
 	flash('You were logged out')
 	return redirect(url_for('show_posts'))
-
-if __name__ == "__main__":
-	app.run()

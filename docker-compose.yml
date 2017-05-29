@@ -6,7 +6,7 @@ services:
      - postgres
     environment:
      - "FLASK_APP=maxxbook"
-     - "FLASK_DEBUG=1"
+     - "FLASK_DEBUG=True"
      - "LANG=C.UTF-8"
     expose:
      - "3031"
