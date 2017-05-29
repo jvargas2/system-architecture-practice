@@ -1,38 +1,37 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Text, DateTime
 from maxxbook import db
 
 class User(db.Model):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    username = Column(String(80), unique=True)
-    email = Column(String(120), unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True)
+    first_name = db.Column(db.String(80), unique=False)
+    last_name = db.Column(db.String(80), unique=False)
+    password = db.Column(db.String(80), unique=False)
+    posts = db.relationship('Post', backref='user', lazy='dynamic')
+    created_at = db.Column(db.DateTime, unique=False)
 
-    def __init__(self, username, email):
-        self.username = username
+    def __init__(self, email, first_name, last_name, password):
         self.email = email
+        self.first_name = first_name
+        self.last_name = last_name
+        self.password = password
+        self.created_at = datetime.utcnow()
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r %r>' % (self.first_name, self.last_name)
 
 class Post(db.Model):
-    __tablename__ = 'posts'
-    id = Column(Integer, primary_key=True)
-    title = Column(String(80))
-    body = Column(Text)
-    pub_date = Column(DateTime)
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    body = db.Column(db.Text)
+    pub_date = db.Column(db.DateTime)
 
-    # category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    # category = db.relationship('Category',
-    #     backref=db.backref('posts', lazy='dynamic'))
-
-    def __init__(self, title, body, pub_date=None):
-        self.title = title
+    def __init__(self, user_id, body, pub_date=None):
+        self.user_id = user_id
         self.body = body
         if pub_date is None:
             pub_date = datetime.utcnow()
         self.pub_date = pub_date
-        # self.category = category
 
     def __repr__(self):
-        return '<Post %r>' % self.title
+        return '<Post %r>' % str(self.id)
