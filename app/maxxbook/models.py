@@ -28,12 +28,10 @@ class Post(db.Model):
     body = db.Column(db.Text)
     pub_date = db.Column(db.DateTime)
 
-    def __init__(self, user_id, body, pub_date=None):
+    def __init__(self, user_id, body):
         self.user_id = user_id
         self.body = body
-        if pub_date is None:
-            pub_date = datetime.utcnow()
-        self.pub_date = pub_date
+        self.pub_date = datetime.utcnow()
 
     def __repr__(self):
         return '<Post %r>' % str(self.id)
