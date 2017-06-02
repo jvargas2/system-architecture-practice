@@ -1,7 +1,7 @@
 version: '2'
 services:
   app:
-    build: ./app
+    build: .
     depends_on:
      - postgres
     environment:
@@ -15,7 +15,7 @@ services:
     links:
      - postgres:postgres
     volumes:
-     - ./app:/app
+     - ./:/app
   nginx:
     image: nginx:latest
     links:

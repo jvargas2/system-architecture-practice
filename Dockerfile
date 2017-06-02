@@ -7,4 +7,4 @@ RUN pip3 install --upgrade pip
 RUN pip install -r requirements.txt
 RUN pip install --editable .
 ENTRYPOINT ["uwsgi"]
-CMD ["--emperor", "/app"]
+CMD ["--emperor", "."]
