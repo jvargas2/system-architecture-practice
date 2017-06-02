@@ -1,1 +1,1 @@
-web: uwsgi --emperor .
+web: uwsgi uwsgi.ini
