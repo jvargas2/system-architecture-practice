@@ -1,1 +1,1 @@
-web: flask run --debugger
+web: flask run --debugger --host=0.0.0.0
