@@ -1,12 +1,6 @@
 Maxxbook Setup Guide
 ====================
 
-There are two ways to run the development environment.
-
-The first is by using virtualenv and the Flask dev server. This one is harder to set up but can be faster for development.
-
-The second is by using Docker and docker-compose. This one is easier to set up and more accurate to prod but requires restarting the containers after every change.
-
 # Virtualenv Setup
 
 Please make sure the following are installed:
@@ -26,16 +20,18 @@ Run the following commands from the app directory to set up virtualenv:
 
 1. `cd app`
 2. `virtualenv venv`
-3. 
-4. `source venv/bin/activate`
 
+Add the following lines to `venv/bin/activate` so you have the proper env variables:
 
-4. `pip install -r requirements.txt`
-5. `pip install -e .`
+* `export FLASK_APP='maxxbook'`
+* `export FLASK_DEBUG='True'
+* `export FLASK_DATABASE_URI="postgres://[your-postgres-username]@localhost:5432/maxxbook_dev"`
 
-# Docker Setup
+Activate the virtualenv and install the requirements:
 
-Please make sure the following are installed:
+1. `source venv/bin/activate`
+2. `pip install -r requirements.txt`
+3. `pip install -e .`
 
-* Docker
-* Docker-compose
+Start the app:
+1. `flask run`
