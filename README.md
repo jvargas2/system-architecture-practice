@@ -1,37 +1,24 @@
-Maxxbook Setup Guide
+System Architecture Practice
 ====================
 
-# Virtualenv Setup
+This repo is so I can practice building scalable architectures locally. I will be using docker-compose to emulate
+a distributed system. The following are instructions for how to run the project yourself.
+
+# Docker-compose Setup
 
 Please make sure the following are installed:
 
-* Python 3.6 - The programming language the whole project will be using
-* Pip3 - A python package manager
-* Virtualenv - A tool for creating isolated python environment so you're installing every package globally
-* PostgreSQL - The database the project will be using
+* Docker
+* Docker-compose
 
-Set up your database
+Run the following command to start your docker containers:
 
-1. Start your Postgres server and make sure it's running on port 5432
-2. Create a database named `maxxbook_dev`
+`docker-compose up`
 
+Here are some other useful commands for running the project:
 
-Run the following commands from the app directory to set up virtualenv:
-
-1. `cd app`
-2. `virtualenv venv`
-
-Add the following lines to `venv/bin/activate` so you have the proper env variables:
-
-* `export FLASK_APP='maxxbook'`
-* `export FLASK_DEBUG='True'
-* `export FLASK_DATABASE_URI="postgres://[your-postgres-username]@localhost:5432/maxxbook_dev"`
-
-Activate the virtualenv and install the requirements:
-
-1. `source venv/bin/activate`
-2. `pip install -r requirements.txt`
-3. `pip install -e .`
-
-Start the app:
-1. `flask run`
+* To rebuild the containers: `docker-compose up --build`
+* To run the containers in the background: `docker-compose up -d`
+* To see which containers are running: `docker ps`
+* To shut down the containers: `docker-compose kill`
+* To destroy the containers: `docker-compose down`
