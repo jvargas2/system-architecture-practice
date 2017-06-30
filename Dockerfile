@@ -6,5 +6,4 @@ WORKDIR /app
 RUN pip3 install --upgrade pip
 RUN pip install -r requirements.txt
 RUN pip install --editable .
-ENTRYPOINT ["uwsgi"]
-CMD ["docker-uwsgi.ini"]
+ENTRYPOINT flask db upgrade && uwsgi docker-uwsgi.ini
