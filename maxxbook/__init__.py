@@ -8,10 +8,9 @@ app.config.from_object(BaseConfig)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 import maxxbook.views
 
 if __name__ == "__main__":
-	app.run()
+    app.run()

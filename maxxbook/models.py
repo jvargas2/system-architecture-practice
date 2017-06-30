@@ -1,6 +1,7 @@
 from datetime import datetime
 from maxxbook import db
 
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -20,6 +21,7 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r %r>' % (self.first_name, self.last_name)
+
 
 class Post(db.Model):
     __tablename__ = 'posts'
